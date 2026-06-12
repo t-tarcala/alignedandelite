@@ -147,7 +147,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   const hero = document.querySelector(".section__hero_full-page");
   const logo = document.querySelector(".hero__symbol-wrap");
-  const pattern = document.querySelector(".bg__pattern");
+  //const pattern = document.querySelector(".bg__pattern");
   const subheading = document.querySelector(".hero__subheading");
   
   mm.add("(min-width: 480px)", () => {
@@ -177,7 +177,8 @@ document.addEventListener('DOMContentLoaded', function() {
       markers: false,
     },
   });
-  
+
+  /*
   const bgAnim = gsap.from(pattern, {
     scale: 0.8,
     color: "#eee2d7",
@@ -190,6 +191,7 @@ document.addEventListener('DOMContentLoaded', function() {
       markers: false,
     },
   });
+  */
 
 
 
@@ -576,6 +578,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
+  /*
+  
   // BG ANIMATION
   
   const bgPattern = document.querySelector(".bg__pattern-wrap.is-home");
@@ -594,8 +598,6 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
 
-
-  /*
   
   // NAVBAR LOGO ANIMATION
   
