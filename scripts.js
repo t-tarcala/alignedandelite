@@ -209,7 +209,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const clrPrimary = computedStyle.getPropertyValue("--clr_primary-100");
     const clrGold = computedStyle.getPropertyValue("--clr_primary-700");
     const clrHighlight = computedStyle.getPropertyValue("--clr_highlight-A-100");
-    
+
+    // PROCESS HORIZONTAL
     ScrollTrigger.matchMedia({ "(min-width: 1280px)": function() {
       
       processGrids.forEach(processGrid => {
@@ -233,7 +234,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
       });
     }});
-    
+
+    // PROCESS VERTICAL
     ScrollTrigger.matchMedia({ "(max-width: 1279px)": function() {
       
       const processCards = document.querySelectorAll('.process-card');
@@ -259,6 +261,7 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     }});
 
+    // PACKAGES HORIZONTAL
     ScrollTrigger.matchMedia({ "(min-width: 768px)": function() {
 
       packageGrids.forEach(packageGrid => {
@@ -303,7 +306,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
       });
     }});
-      
+
+    // PACKAGES VERTICAL
     ScrollTrigger.matchMedia({ "(max-width: 767px)": function() {
 
       const packageCards = document.querySelectorAll('.package-card');
