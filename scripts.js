@@ -231,7 +231,7 @@ document.addEventListener('DOMContentLoaded', function() {
             markers: false,
           },
         });
-      };
+      });
     }});
     
     ScrollTrigger.matchMedia({ "(max-width: 1279px)": function() {
