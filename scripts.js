@@ -271,6 +271,8 @@ document.addEventListener('DOMContentLoaded', function() {
         
         gsap.set(cardIcons, { opacity: 0 }, cardTexts, { opacity: 0 });
         
+        const animDuration = 0.4;
+        const animEase = "power3.out";
         const offsetStep = 10; // % of viewport height between each card's trigger point
         
         cardIcons.forEach((cardIcon, i) => {
@@ -281,13 +283,13 @@ document.addEventListener('DOMContentLoaded', function() {
             markers: false,
             onEnter: () => gsap.to( cardIcon, {
               opacity: 1,
-              duration: 0.2,
+              duration: animDuration,
               ease: "power3.out",
             }),
             onLeaveBack: () => gsap.to(cardIcon, {
               opacity: 0,
-              duration: 0.2,
-              ease: "power3.out",
+              duration: animDuration,
+              ease: animEase,
             }),
           });
         });
@@ -300,13 +302,13 @@ document.addEventListener('DOMContentLoaded', function() {
             markers: false,
             onEnter: () => gsap.to( cardTitle, {
               color: clrPrimary,
-              duration: 0.2,
-              ease: "power3.out",
+              duration: animDuration,
+              ease: animEase,
             }),
             onLeaveBack: () => gsap.to(cardTitle, {
               color: clrGold,
-              duration: 0.2,
-              ease: "power3.out",
+              duration: animDuration,
+              ease: animEase,
             }),
           });
         });
@@ -319,13 +321,13 @@ document.addEventListener('DOMContentLoaded', function() {
             markers: false,
             onEnter: () => gsap.to( cardText, {
               opacity: 1,
-              duration: 0.2,
-              ease: "power3.out",
+              duration: animDuration,
+              ease: animEase,
             }),
             onLeaveBack: () => gsap.to(cardText, {
               opacity: 0,
-              duration: 0.2,
-              ease: "power3.out",
+              duration: animDuration,
+              ease: animEase,
             }),
           });
         });
@@ -340,15 +342,15 @@ document.addEventListener('DOMContentLoaded', function() {
               color: clrHighlight,
               backgroundColor: clrPrimary,
               borderColor: clrPrimary,
-              duration: 0.2,
-              ease: "power3.out",
+              duration: animDuration,
+              ease: animEase,
             }),
             onLeaveBack: () => gsap.to(cardTag, {
               color: clrGold,
               backgroundColor: "rgba(245, 240, 235, 0)",
               borderColor: clrGold,
-              duration: 0.2,
-              ease: "power3.out",
+              duration: animDuration,
+              ease: animEase,
             }),  
           });
         });
