@@ -316,7 +316,7 @@ document.addEventListener('DOMContentLoaded', function() {
             trigger: packageGrid,
             start: `40% ${60 - i * offsetStep}%`,
             end: `40% ${60 - i * offsetStep}%`,
-            markers: true,
+            markers: false,
             onEnter: () => gsap.to( cardText, {
               opacity: 1,
               duration: 0.2,
