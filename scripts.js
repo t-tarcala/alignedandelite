@@ -19,6 +19,8 @@ document.addEventListener('DOMContentLoaded', function() {
   
   const mm = gsap.matchMedia();
 
+  const computedStyle = getComputedStyle(document.documentElement);
+
 
   
   // LENIS SMOOTH SCROLL
@@ -520,7 +522,6 @@ document.addEventListener('DOMContentLoaded', function() {
   const coachLogo = document.querySelector('.coach-pro__logo-wrap');
   const coachNextSec = document.querySelector('#coachNextSec');
   
-  const computedStyle = getComputedStyle(document.documentElement);
   const clrPrimary400 = computedStyle.getPropertyValue("--clr_primary-400");
   const clrPrimary700 = computedStyle.getPropertyValue("--clr_primary-700");
   
