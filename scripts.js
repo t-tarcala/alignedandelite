@@ -263,10 +263,9 @@ document.addEventListener('DOMContentLoaded', function() {
       
       packageGrids.forEach(packageGrid => {
         
-        const cardBgs = gsap.utils.toArray('.icon-card__bg', packageGrid);
         const cardIcons = gsap.utils.toArray('.icon-card__icon', packageGrid);
         const cardTitles = gsap.utils.toArray('.package-card__title', packageGrid);
-        const cardTexts = gsap.utils.toArray('.icon-card__pattern.icon-card__pattern_package', packageGrid);
+        const cardTexts = gsap.utils.toArray('.package-card__text-anim-wrap', packageGrid);
         const cardTags = gsap.utils.toArray('.package-card__tag', packageGrid);
         
         gsap.set(cardIcons, { opacity: 0 }, cardTexts, { opacity: 0 });
@@ -284,7 +283,7 @@ document.addEventListener('DOMContentLoaded', function() {
             onEnter: () => gsap.to( cardIcon, {
               opacity: 1,
               duration: animDuration,
-              ease: "power3.out",
+              ease: animEase,
             }),
             onLeaveBack: () => gsap.to(cardIcon, {
               opacity: 0,
