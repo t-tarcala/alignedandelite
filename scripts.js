@@ -258,9 +258,53 @@ document.addEventListener('DOMContentLoaded', function() {
         });
       });
     }});
-    
+
     ScrollTrigger.matchMedia({ "(min-width: 768px)": function() {
-      
+
+      packageGrids.forEach(packageGrid => {
+        const cardIcons  = gsap.utils.toArray('.icon-card__icon', packageGrid);
+        const cardTitles = gsap.utils.toArray('.package-card__title', packageGrid);
+        const cardTexts  = gsap.utils.toArray('.package-card__text-anim-wrap', packageGrid);
+        const cardTags   = gsap.utils.toArray('.package-card__tag', packageGrid);
+        
+        gsap.set(cardIcons, { opacity: 0 });
+        gsap.set(cardTexts, { opacity: 0 });
+        
+        const offsetStep   = 10;
+        const animDuration = 0.4;
+        const animEase     = "power3.out";
+        const common       = { duration: animDuration, ease: animEase };
+        
+        // One entry per "layer" of elements, with its enter/leave values
+        const layers = [
+          { targets: cardIcons,  enter: { opacity: 1 }, leave: { opacity: 0 } },
+          { targets: cardTitles, enter: { color: clrPrimary }, leave: { color: clrGold } },
+          { targets: cardTexts,  enter: { opacity: 1 }, leave: { opacity: 0 } },
+          { targets: cardTags, enter: {
+              color: clrHighlight,
+              borderColor: clrPrimary,
+            }, leave: {
+              color: clrGold,
+              borderColor: clrGold,
+            },
+          },
+        ];
+        
+        cardIcons.forEach((_, i) => {
+          const pos = `40% ${60 - i * offsetStep}%`;
+          
+          ScrollTrigger.create({
+            trigger: packageGrid,
+            start: pos,
+            end: pos,
+            onEnter:     () => layers.forEach(l => gsap.to(l.targets[i], { ...l.enter, ...common })),
+            onLeaveBack: () => layers.forEach(l => gsap.to(l.targets[i], { ...l.leave, ...common })),
+          });
+        });
+      });
+
+
+      /*
       packageGrids.forEach(packageGrid => {
         
         const cardIcons = gsap.utils.toArray('.icon-card__icon', packageGrid);
@@ -270,16 +314,16 @@ document.addEventListener('DOMContentLoaded', function() {
         
         gsap.set(cardIcons, { opacity: 0 }, cardTexts, { opacity: 0 });
         
+        const offsetStep = 10; // % of viewport height between each card's trigger point
         const animDuration = 0.4;
         const animEase = "power3.out";
-        const offsetStep = 10; // % of viewport height between each card's trigger point
         
         cardIcons.forEach((cardIcon, i) => {
           ScrollTrigger.create({
             trigger: packageGrid,
             start: `40% ${60 - i * offsetStep}%`,
             end: `40% ${60 - i * offsetStep}%`,
-            markers: false,
+            markers: true,
             onEnter: () => gsap.to( cardIcon, {
               opacity: 1,
               duration: animDuration,
@@ -354,73 +398,141 @@ document.addEventListener('DOMContentLoaded', function() {
           });
         });
       });
+      */
     }});
       
     ScrollTrigger.matchMedia({ "(max-width: 767px)": function() {
+
+      const packageCards = document.querySelectorAll('.package-card');
+      packageCards.forEach((packageCard) => {
+        const cardIcon  = packageCard.querySelector('.icon-card__icon');
+        const cardTitle = packageCard.querySelector('.package-card__title');
+        const cardText  = packageCard.querySelector('.package-card__text-anim-wrap');
+        const cardTag   = packageCard.querySelector('.package-card__tag');
+        
+        gsap.set(cardIcon, { opacity: 0 });
+        gsap.set(cardText, { opacity: 0 });
+        
+        const animDuration = 0.4;
+        const animEase     = "none";
+        const animStart    = "40% 75%";
+        const animEnd      = "60% 75%";
+        const common       = { duration: animDuration, ease: animEase };
+        
+        const layers = [
+          { target: cardIcon,  enter: { opacity: 1 }, leave: { opacity: 0 } },
+          { target: cardTitle, enter: { opacity: 1 }, leave: { opacity: 0 } },
+          { target: cardText,  enter: { opacity: 1 }, leave: { opacity: 0 } },
+          { target: cardTag, enter: {
+              color: clrHighlight,
+              borderColor: clrPrimary,
+            }, leave: {
+              color: clrGold,
+              borderColor: clrGold,
+            },
+          },
+        ];
+        
+        ScrollTrigger.create({
+          trigger: packageCard,
+          start: animStart,
+          end: animEnd,
+          markers: false,
+          onEnter:     () => layers.forEach(l => gsap.to(l.target, { ...l.enter, ...common })),
+          onLeaveBack: () => layers.forEach(l => gsap.to(l.target, { ...l.leave, ...common })),
+        });
+        
+      });
       
+      /*
       const packageCards = document.querySelectorAll('.package-card');
       
       packageCards.forEach((packageCard) => {
         
-        const cardBg = packageCard.querySelector('.icon-card__bg');
-        const cardPattern = packageCard.querySelector('.icon-card__pattern_package');
         const cardIcon = packageCard.querySelector('.icon-card__icon');
+        const cardTitle = packageCard.querySelector('.package-card__title');
+        const cardText = packageCard.querySelector('.package-card__text-anim-wrap');
         const cardTag = packageCard.querySelector('.package-card__tag');
         
-        gsap.set(cardIcon, { opacity: 0 });
-        gsap.to(cardBg, {
-          duration: 0.4,
-          backgroundColor: clrHighlight,
-          ease: "none",
-          scrollTrigger: {
-            trigger: packageCard,
-            start: "40% 75%",
-            end: "60% 75%",
-            scrub: true,
-            markers: false,
-          },
+        gsap.set(cardIcon, { opacity: 0 }), cardText, { opacity: 0 });
+
+        const animDuration = 0.4;
+        const animEase = "none";
+        const animStart = "40% 75%";
+        const animEnd = "60% 75%";
+        
+        ScrollTrigger.create({
+          trigger: packageCard,
+          start: animStart,
+          end: animEnd,
+          markers: false,
+          onEnter: () => gsap.to( cardIcon, {
+            opacity: 1,
+            duration: animDuration,
+            ease: animEase,
+          }),
+          onLeaveBack: () => gsap.to(cardIcon, {
+            opacity: 0,
+            duration: animDuration,
+            ease: animEase,
+          }),  
+        });
+
+        ScrollTrigger.create({
+          trigger: packageCard,
+          start: animStart,
+          end: animEnd,
+          markers: false,
+          onEnter: () => gsap.to( cardTitle, {
+            opacity: 1,
+            duration: animDuration,
+            ease: animEase,
+          }),
+          onLeaveBack: () => gsap.to(cardTitle, {
+            opacity: 0,
+            duration: animDuration,
+            ease: animEase,
+          }),  
+        });
+
+        ScrollTrigger.create({
+          trigger: packageCard,
+          start: animStart,
+          end: animEnd,
+          markers: false,
+          onEnter: () => gsap.to( cardText, {
+            opacity: 1,
+            duration: animDuration,
+            ease: animEase,
+          }),
+          onLeaveBack: () => gsap.to(cardText, {
+            opacity: 0,
+            duration: animDuration,
+            ease: animEase,
+          }),  
+        });
+
+        ScrollTrigger.create({
+          trigger: packageCard,
+          start: animStart,
+          end: animEnd,
+          markers: false,
+          onEnter: () => gsap.to( cardTag, {
+            color: clrHighlight,
+            borderColor: clrPrimary,
+            duration: animDuration,
+            ease: animEase,
+          }),
+          onLeaveBack: () => gsap.to(cardTag, {
+            color: clrGold,
+            borderColor: clrGold,
+            duration: animDuration,
+            ease: animEase,
+          }),  
         });
         
-        gsap.to(cardPattern, {
-          duration: 0.4,
-          color: "#37452A",
-          ease: "none",
-          scrollTrigger: {
-            trigger: packageCard,
-            start: "40% 75%",
-            end: "60% 75%",
-            scrub: true,
-            markers: false,
-          },
-        });
-        
-        gsap.to(cardIcon, {
-          duration: 0.4,
-          opacity: 1,
-          ease: "none",
-          scrollTrigger: {
-            trigger: packageCard,
-            start: "40% 75%",
-            end: "60% 75%",
-            scrub: true,
-            markers: false,
-          },
-        });
-        
-        gsap.to(cardTag, {
-          duration: 0.4,
-          color: clrHighlight,
-          backgroundColor: clrPrimary,
-          borderColor: clrPrimary,
-          ease: "none",
-          scrollTrigger: {
-            trigger: packageCard,start: "40% 75%",
-            end: "60% 75%",
-            scrub: true,
-            markers: false,
-          },
-        });
       });
+      */
     }});
     
   })();  
