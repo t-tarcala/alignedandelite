@@ -195,234 +195,236 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // CARD ICON ANIMATION
   
-  const isTouchDevice =
-    window.matchMedia('(hover: none)').matches ||
-    'ontouchstart' in window ||
-    navigator.maxTouchPoints > 0;
-  
-  if (!isTouchDevice) return; // Only run on touch devices
-  
-  const processGrids = gsap.utils.toArray('.process-grid');
-  const packageGrids = gsap.utils.toArray('.package-grid');
-  
-  const clrPrimary = computedStyle.getPropertyValue("--clr_primary-100");
-  const clrGold = computedStyle.getPropertyValue("--clr_primary-700");
-  const clrHighlight = computedStyle.getPropertyValue("--clr_highlight-A-100");
-  
-  ScrollTrigger.matchMedia({ "(min-width: 1280px)": function() {
+  (function() {
+    const isTouchDevice =
+      window.matchMedia('(hover: none)').matches ||
+      'ontouchstart' in window ||
+      navigator.maxTouchPoints > 0;
     
-    processGrids.forEach(processGrid => {
-      
-      const cardIcons = gsap.utils.toArray('.icon-card__icon', processGrid);
-      
-      gsap.set(cardIcons, { opacity: 0 });
-      
-      gsap.to(cardIcons, {
-        duration: 0.4,
-        opacity: 1,
-        stagger: 0.2,
-        ease: "none",
-        scrollTrigger: {
-          trigger: processGrid,
-          start: "40% 80%",
-          end: "60% 60%",
-          scrub: true,
-          markers: false,
-        },
-      });
-    };
-  }});
-  
-  ScrollTrigger.matchMedia({ "(max-width: 1279px)": function() {
+    if (!isTouchDevice) return; // Only run on touch devices
     
-    const processCards = document.querySelectorAll('.process-card');
+    const processGrids = gsap.utils.toArray('.process-grid');
+    const packageGrids = gsap.utils.toArray('.package-grid');
     
-    processCards.forEach((processCard) => {
-      
-      const cardIcon = processCard.querySelector('.icon-card__icon');
-      
-      gsap.set(cardIcon, { opacity: 0 });
-      
-      gsap.to(cardIcon, {
-        duration: 0.4,
-        opacity: 1,
-        ease: "none",
-        scrollTrigger: {
-          trigger: processCard,
-          start: "40% 75%",
-          end: "60% 75%",
-          scrub: true,
-          markers: false,
-        },
-      });
-    });
-  }});
-  
-  ScrollTrigger.matchMedia({ "(min-width: 768px)": function() {
+    const clrPrimary = computedStyle.getPropertyValue("--clr_primary-100");
+    const clrGold = computedStyle.getPropertyValue("--clr_primary-700");
+    const clrHighlight = computedStyle.getPropertyValue("--clr_highlight-A-100");
     
-    packageGrids.forEach(packageGrid => {
+    ScrollTrigger.matchMedia({ "(min-width: 1280px)": function() {
       
-      const cardBgs = gsap.utils.toArray('.icon-card__bg', packageGrid);
-      const cardIcons = gsap.utils.toArray('.icon-card__icon', packageGrid);
-      const cardTitles = gsap.utils.toArray('.package-card__title', packageGrid);
-      const cardTexts = gsap.utils.toArray('.icon-card__pattern.icon-card__pattern_package', packageGrid);
-      const cardTags = gsap.utils.toArray('.package-card__tag', packageGrid);
+      processGrids.forEach(processGrid => {
+        
+        const cardIcons = gsap.utils.toArray('.icon-card__icon', processGrid);
+        
+        gsap.set(cardIcons, { opacity: 0 });
+        
+        gsap.to(cardIcons, {
+          duration: 0.4,
+          opacity: 1,
+          stagger: 0.2,
+          ease: "none",
+          scrollTrigger: {
+            trigger: processGrid,
+            start: "40% 80%",
+            end: "60% 60%",
+            scrub: true,
+            markers: false,
+          },
+        });
+      };
+    }});
+    
+    ScrollTrigger.matchMedia({ "(max-width: 1279px)": function() {
       
-      gsap.set(cardIcons, { opacity: 0 }, cardTexts, { opacity: 0 });
+      const processCards = document.querySelectorAll('.process-card');
       
-      const offsetStep = 10; // % of viewport height between each card's trigger point
-      
-      cardIcons.forEach((cardIcon, i) => {
-        ScrollTrigger.create({
-          trigger: packageGrid,
-          start: `40% ${60 - i * offsetStep}%`,
-          end: `40% ${60 - i * offsetStep}%`,
-          markers: false,
-          onEnter: () => gsap.to( cardIcon, {
-            opacity: 1,
-            duration: 0.2,
-            ease: "power3.out",
-          }),
-          onLeaveBack: () => gsap.to(cardIcon, {
-            opacity: 0,
-            duration: 0.2,
-            ease: "power3.out",
-          }),
+      processCards.forEach((processCard) => {
+        
+        const cardIcon = processCard.querySelector('.icon-card__icon');
+        
+        gsap.set(cardIcon, { opacity: 0 });
+        
+        gsap.to(cardIcon, {
+          duration: 0.4,
+          opacity: 1,
+          ease: "none",
+          scrollTrigger: {
+            trigger: processCard,
+            start: "40% 75%",
+            end: "60% 75%",
+            scrub: true,
+            markers: false,
+          },
         });
       });
+    }});
+    
+    ScrollTrigger.matchMedia({ "(min-width: 768px)": function() {
       
-      cardTitles.forEach((cardTitle, i) => {
-        ScrollTrigger.create({
-          trigger: packageGrid,
-          start: `40% ${60 - i * offsetStep}%`,
-          end: `40% ${60 - i * offsetStep}%`,
-          markers: false,
-          onEnter: () => gsap.to( cardTitle, {
-            color: clrPrimary,
-            duration: 0.2,
-            ease: "power3.out",
-          }),
-          onLeaveBack: () => gsap.to(cardTitle, {
-            color: clrGold,
-            duration: 0.2,
-            ease: "power3.out",
-          }),
+      packageGrids.forEach(packageGrid => {
+        
+        const cardBgs = gsap.utils.toArray('.icon-card__bg', packageGrid);
+        const cardIcons = gsap.utils.toArray('.icon-card__icon', packageGrid);
+        const cardTitles = gsap.utils.toArray('.package-card__title', packageGrid);
+        const cardTexts = gsap.utils.toArray('.icon-card__pattern.icon-card__pattern_package', packageGrid);
+        const cardTags = gsap.utils.toArray('.package-card__tag', packageGrid);
+        
+        gsap.set(cardIcons, { opacity: 0 }, cardTexts, { opacity: 0 });
+        
+        const offsetStep = 10; // % of viewport height between each card's trigger point
+        
+        cardIcons.forEach((cardIcon, i) => {
+          ScrollTrigger.create({
+            trigger: packageGrid,
+            start: `40% ${60 - i * offsetStep}%`,
+            end: `40% ${60 - i * offsetStep}%`,
+            markers: false,
+            onEnter: () => gsap.to( cardIcon, {
+              opacity: 1,
+              duration: 0.2,
+              ease: "power3.out",
+            }),
+            onLeaveBack: () => gsap.to(cardIcon, {
+              opacity: 0,
+              duration: 0.2,
+              ease: "power3.out",
+            }),
+          });
+        });
+        
+        cardTitles.forEach((cardTitle, i) => {
+          ScrollTrigger.create({
+            trigger: packageGrid,
+            start: `40% ${60 - i * offsetStep}%`,
+            end: `40% ${60 - i * offsetStep}%`,
+            markers: false,
+            onEnter: () => gsap.to( cardTitle, {
+              color: clrPrimary,
+              duration: 0.2,
+              ease: "power3.out",
+            }),
+            onLeaveBack: () => gsap.to(cardTitle, {
+              color: clrGold,
+              duration: 0.2,
+              ease: "power3.out",
+            }),
+          });
+        });
+        
+        cardTexts.forEach((cardText, i) => {
+          ScrollTrigger.create({
+            trigger: packageGrid,
+            start: `40% ${60 - i * offsetStep}%`,
+            end: `40% ${60 - i * offsetStep}%`,
+            markers: true,
+            onEnter: () => gsap.to( cardText, {
+              opacity: 1,
+              duration: 0.2,
+              ease: "power3.out",
+            }),
+            onLeaveBack: () => gsap.to(cardText, {
+              opacity: 0,
+              duration: 0.2,
+              ease: "power3.out",
+            }),
+          });
+        });
+        
+        cardTags.forEach((cardTag, i) => {
+          ScrollTrigger.create({
+            trigger: packageGrid,
+            start: `40% ${60 - i * offsetStep}%`,
+            end: `40% ${60 - i * offsetStep}%`,
+            markers: false,
+            onEnter: () => gsap.to( cardTag, {
+              color: clrHighlight,
+              backgroundColor: clrPrimary,
+              borderColor: clrPrimary,
+              duration: 0.2,
+              ease: "power3.out",
+            }),
+            onLeaveBack: () => gsap.to(cardTag, {
+              color: clrGold,
+              backgroundColor: "rgba(245, 240, 235, 0)",
+              borderColor: clrGold,
+              duration: 0.2,
+              ease: "power3.out",
+            }),  
+          });
         });
       });
+    }});
       
-      cardTexts.forEach((cardText, i) => {
-        ScrollTrigger.create({
-          trigger: packageGrid,
-          start: `40% ${60 - i * offsetStep}%`,
-          end: `40% ${60 - i * offsetStep}%`,
-          markers: true,
-          onEnter: () => gsap.to( cardText, {
-            opacity: 1,
-            duration: 0.2,
-            ease: "power3.out",
-          }),
-          onLeaveBack: () => gsap.to(cardText, {
-            opacity: 0,
-            duration: 0.2,
-            ease: "power3.out",
-          }),
+    ScrollTrigger.matchMedia({ "(max-width: 767px)": function() {
+      
+      const packageCards = document.querySelectorAll('.package-card');
+      
+      packageCards.forEach((packageCard) => {
+        
+        const cardBg = packageCard.querySelector('.icon-card__bg');
+        const cardPattern = packageCard.querySelector('.icon-card__pattern_package');
+        const cardIcon = packageCard.querySelector('.icon-card__icon');
+        const cardTag = packageCard.querySelector('.package-card__tag');
+        
+        gsap.set(cardIcon, { opacity: 0 });
+        gsap.to(cardBg, {
+          duration: 0.4,
+          backgroundColor: clrHighlight,
+          ease: "none",
+          scrollTrigger: {
+            trigger: packageCard,
+            start: "40% 75%",
+            end: "60% 75%",
+            scrub: true,
+            markers: false,
+          },
+        });
+        
+        gsap.to(cardPattern, {
+          duration: 0.4,
+          color: "#37452A",
+          ease: "none",
+          scrollTrigger: {
+            trigger: packageCard,
+            start: "40% 75%",
+            end: "60% 75%",
+            scrub: true,
+            markers: false,
+          },
+        });
+        
+        gsap.to(cardIcon, {
+          duration: 0.4,
+          opacity: 1,
+          ease: "none",
+          scrollTrigger: {
+            trigger: packageCard,
+            start: "40% 75%",
+            end: "60% 75%",
+            scrub: true,
+            markers: false,
+          },
+        });
+        
+        gsap.to(cardTag, {
+          duration: 0.4,
+          color: clrHighlight,
+          backgroundColor: clrPrimary,
+          borderColor: clrPrimary,
+          ease: "none",
+          scrollTrigger: {
+            trigger: packageCard,start: "40% 75%",
+            end: "60% 75%",
+            scrub: true,
+            markers: false,
+          },
         });
       });
-      
-      cardTags.forEach((cardTag, i) => {
-        ScrollTrigger.create({
-          trigger: packageGrid,
-          start: `40% ${60 - i * offsetStep}%`,
-          end: `40% ${60 - i * offsetStep}%`,
-          markers: false,
-          onEnter: () => gsap.to( cardTag, {
-            color: clrHighlight,
-            backgroundColor: clrPrimary,
-            borderColor: clrPrimary,
-            duration: 0.2,
-            ease: "power3.out",
-          }),
-          onLeaveBack: () => gsap.to(cardTag, {
-            color: clrGold,
-            backgroundColor: "rgba(245, 240, 235, 0)",
-            borderColor: clrGold,
-            duration: 0.2,
-            ease: "power3.out",
-          }),
-        });
-      });
-    });
-  }});
+    }});
     
-  ScrollTrigger.matchMedia({ "(max-width: 767px)": function() {
+  })();  
     
-    const packageCards = document.querySelectorAll('.package-card');
     
-    packageCards.forEach((packageCard) => {
-      
-      const cardBg = packageCard.querySelector('.icon-card__bg');
-      const cardPattern = packageCard.querySelector('.icon-card__pattern_package');
-      const cardIcon = packageCard.querySelector('.icon-card__icon');
-      const cardTag = packageCard.querySelector('.package-card__tag');
-      
-      gsap.set(cardIcon, { opacity: 0 });
-      gsap.to(cardBg, {
-        duration: 0.4,
-        backgroundColor: clrHighlight,
-        ease: "none",
-        scrollTrigger: {
-          trigger: packageCard,
-          start: "40% 75%",
-          end: "60% 75%",
-          scrub: true,
-          markers: false,
-        },
-      });
-      
-      gsap.to(cardPattern, {
-        duration: 0.4,
-        color: "#37452A",
-        ease: "none",
-        scrollTrigger: {
-          trigger: packageCard,
-          start: "40% 75%",
-          end: "60% 75%",
-          scrub: true,
-          markers: false,
-        },
-      });
-      
-      gsap.to(cardIcon, {
-        duration: 0.4,
-        opacity: 1,
-        ease: "none",
-        scrollTrigger: {
-          trigger: packageCard,
-          start: "40% 75%",
-          end: "60% 75%",
-          scrub: true,
-          markers: false,
-        },
-      });
-      
-      gsap.to(cardTag, {
-        duration: 0.4,
-        color: clrHighlight,
-        backgroundColor: clrPrimary,
-        borderColor: clrPrimary,
-        ease: "none",
-        scrollTrigger: {
-          trigger: packageCard,start: "40% 75%",
-          end: "60% 75%",
-          scrub: true,
-          markers: false,
-        },
-      });
-    });
-  }});
-  
-  
-  
   // PURPOSE HIGHLIGHTS ANIMATION
   
   const purposeWrap = gsap.utils.toArray('.purpose-highlight__wrap');
