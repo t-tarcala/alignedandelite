@@ -592,10 +592,12 @@ document.addEventListener('DOMContentLoaded', function() {
       loop: true,
       slidesPerView: 1,
       speed: 400,
+      centeredSlides: true,
       mousewheel: {
         forceToAxis: true,
       },
       grabCursor: true,
+      freeMode: false,
       navigation: {
         nextEl: buttonNext,
         prevEl: buttonPrev,
