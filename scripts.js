@@ -578,6 +578,37 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
+  // CLIENT SLIDER
+  
+  const clientSliderComponents = document.querySelectorAll('.client-slider-component');
+  
+  clientSliderComponents.forEach(clientSliderComponent => {
+    
+    const buttonNext = clientSliderComponent.querySelector('.swiper-button__next');
+    const buttonPrev = clientSliderComponent.querySelector('.swiper-button__prev');
+    
+    const clientSlider = new Swiper('.swiper.swiper__client', {
+      // Optional parameters
+      loop: true,
+      slidesPerView: 1,
+      speed: 400,
+      mousewheel: {
+        forceToAxis: true,
+      },
+      grabCursor: true,
+      navigation: {
+        nextEl: buttonNext,
+        prevEl: buttonPrev,
+      },
+      effect: 'fade',
+      fadeEffect: {
+        crossFade: true
+      },
+    });
+  });
+
+
+
   /*
   
   // BG ANIMATION
