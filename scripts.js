@@ -595,6 +595,7 @@ document.addEventListener('DOMContentLoaded', function() {
       centeredSlides: true,
       mousewheel: {
         forceToAxis: true,
+        sensitivity: 0.75,
       },
       grabCursor: true,
       freeMode: false,
