@@ -596,6 +596,7 @@ document.addEventListener('DOMContentLoaded', function() {
         sensitivity: 0.75,
       },
       touchReleaseOnEdges: true,
+      threshold: 0,
       grabCursor: false,
       freeMode: false,
       effect: 'fade',
