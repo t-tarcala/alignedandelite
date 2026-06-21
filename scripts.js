@@ -580,11 +580,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // PURPOSE SLIDER
   
-  const clientSliderComponents = document.querySelectorAll('.purpose-slider-component');
+  const purposeSliderComponents = document.querySelectorAll('.purpose-slider-component');
   
-  clientSliderComponents.forEach(clientSliderComponent => {
+  purposeSliderComponents.forEach(purposeSliderComponent => {
     
-    const clientSlider = new Swiper('.swiper.swiper__purpose', {
+    const purposeSlider = new Swiper('.swiper.swiper__purpose', {
       // Optional parameters
       loop: false,
       slidesPerView: 1,
