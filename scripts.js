@@ -610,89 +610,86 @@ document.addEventListener('DOMContentLoaded', function() {
 
   
   // SWIPER INTEGRATION WITH LENIS SNAP LOCK
-  // Place this after both Lenis and Swiper are initialized
   
   (function () {
-    const swiperEl = document.querySelector('.swiper.swiper__purpose'); // adjust selector to match yours
+    const swiperEl = document.querySelector('.swiper.swiper__purpose'); // adjust to your selector
     if (!swiperEl) return;
     
     const lenis = window.lenis;
-    const swiper = swiperEl.swiper; // get the Swiper instance from the DOM element
+    const swiper = swiperEl.swiper;
     
     if (!swiper) {
       console.warn('Swiper instance not found on element.');
       return;
     }
     
-    let lockedBySwiper = false;
+    let swiperActive = false;
     
-    // --- LOCK helpers ---
-    function lockLenis() {
-      if (!lockedBySwiper) {
-        lockedBySwiper = true;
-        lenis.stop();          // pause Lenis entirely
-      }
+    // --- Disable Swiper interaction until snapped into place ---
+    function deactivateSwiper() {
+      swiperActive = false;
+      swiper.mousewheel.disable();
+      swiper.disable(); // disables touch/drag too
+      lenis.start();
     }
     
-    function unlockLenis() {
-      if (lockedBySwiper) {
-        lockedBySwiper = false;
-        lenis.start();         // resume Lenis (snapping logic takes over naturally)
-      }
+    function activateSwiper() {
+      if (swiperActive) return;
+      swiperActive = true;
+      swiper.enable();
+      swiper.mousewheel.enable();
+      lenis.stop();
     }
     
-    // --- Lock Lenis while pointer/touch is inside the Swiper section ---
-    swiperEl.addEventListener('mouseenter', lockLenis);
-    swiperEl.addEventListener('touchstart', lockLenis, { passive: true });
+    // Start in deactivated state
+    deactivateSwiper();
     
-    swiperEl.addEventListener('mouseleave', () => {
-      // Only unlock if Swiper is actually at an edge, otherwise keep locked
-      // so a quick mouse-out doesn't accidentally scroll the page mid-slide
-      if (swiper.isBeginning || swiper.isEnd) {
-        unlockLenis();
-      }
-    });
+    // --- Detect when the snap has landed on the Swiper section ---
+    const CENTERED_TOLERANCE = 5; // px — how close to centre counts as "snapped"
+    let snapCheckInterval = null;
     
-    swiperEl.addEventListener('touchend', () => {
-      if (swiper.isBeginning || swiper.isEnd) {
-        unlockLenis();
-      }
-    });
-    
-    // --- When Swiper hits an edge, let Lenis resume ---
-    // reachBeginning fires when scrolling backward past slide 0
-    // reachEnd fires when scrolling forward past the last slide
-    swiper.on('reachBeginning', () => {
-      // Small delay matches the time Swiper takes to confirm the edge
-      setTimeout(unlockLenis, 300);
-    });
-    
-    swiper.on('reachEnd', () => {
-      setTimeout(unlockLenis, 300);
-    });
-    
-    // --- Re-lock if user scrolls back into the middle of the slider ---
-    swiper.on('fromEdge', () => {
-      lockLenis();
-    });
-    
-    // Safety: make sure Lenis is locked as soon as the snap puts
-    // the Swiper section in the centre of the viewport
-    lenis.on('scroll', () => {
+    function isSwiperCentered() {
       const rect = swiperEl.getBoundingClientRect();
       const viewportCenter = window.innerHeight / 2;
       const elCenter = rect.top + rect.height / 2;
-      const isCentered = Math.abs(viewportCenter - elCenter) < 10; // px tolerance
+      return Math.abs(viewportCenter - elCenter) < CENTERED_TOLERANCE;
+    }
+    
+    // Poll briefly after each Lenis scrollTo settles to check if we landed on Swiper
+    // Lenis fires a 'scroll' event on every frame during animation; we watch for it stopping (no new events) as the signal that snapping is complete.
+    let scrollSettleTimer = null;
+    
+    lenis.on('scroll', () => {
+      // While scrolling, keep Swiper inactive
+      if (swiperActive) return;
       
-      if (isCentered && !lockedBySwiper) {
-        // Only lock automatically if the pointer is over it
-        // (avoids locking when scrolling past quickly on mobile)
-        lockLenis();
-      }
+      clearTimeout(scrollSettleTimer);
+      scrollSettleTimer = setTimeout(() => {
+        // Scroll has settled — check if Swiper is centred
+        if (isSwiperCentered()) {
+          activateSwiper();
+        }
+      }, 50); // 50 ms after last scroll frame = settled
     });
+    
+    // --- When Swiper reaches an edge, deactivate and release Lenis ---
+    function handleEdgeReached() {
+      setTimeout(() => {
+        deactivateSwiper();
+      }, 300); // small delay so the same scroll delta doesn't immediately re-snap
+    }
+    
+    swiper.on('reachBeginning', handleEdgeReached);
+    swiper.on('reachEnd', handleEdgeReached);
+    
+    // --- Re-lock if user reverses back from an edge into the middle slides ---
+    swiper.on('fromEdge', () => {
+      if (!swiperActive) activateSwiper();
+    });
+    
   })();
 
-
+  
 
   // CLIENT SLIDER
   
