@@ -608,6 +608,90 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
+  
+  // SWIPER INTEGRATION WITH LENIS SNAP LOCK
+  // Place this after both Lenis and Swiper are initialized
+  
+  (function () {
+    const swiperEl = document.querySelector('.swiper.swiper__purpose'); // adjust selector to match yours
+    if (!swiperEl) return;
+    
+    const lenis = window.lenis;
+    const swiper = swiperEl.swiper; // get the Swiper instance from the DOM element
+    
+    if (!swiper) {
+      console.warn('Swiper instance not found on element.');
+      return;
+    }
+    
+    let lockedBySwiper = false;
+    
+    // --- LOCK helpers ---
+    function lockLenis() {
+      if (!lockedBySwiper) {
+        lockedBySwiper = true;
+        lenis.stop();          // pause Lenis entirely
+      }
+    }
+    
+    function unlockLenis() {
+      if (lockedBySwiper) {
+        lockedBySwiper = false;
+        lenis.start();         // resume Lenis (snapping logic takes over naturally)
+      }
+    }
+    
+    // --- Lock Lenis while pointer/touch is inside the Swiper section ---
+    swiperEl.addEventListener('mouseenter', lockLenis);
+    swiperEl.addEventListener('touchstart', lockLenis, { passive: true });
+    
+    swiperEl.addEventListener('mouseleave', () => {
+      // Only unlock if Swiper is actually at an edge, otherwise keep locked
+      // so a quick mouse-out doesn't accidentally scroll the page mid-slide
+      if (swiper.isBeginning || swiper.isEnd) {
+        unlockLenis();
+      }
+    });
+    
+    swiperEl.addEventListener('touchend', () => {
+      if (swiper.isBeginning || swiper.isEnd) {
+        unlockLenis();
+      }
+    });
+    
+    // --- When Swiper hits an edge, let Lenis resume ---
+    // reachBeginning fires when scrolling backward past slide 0
+    // reachEnd fires when scrolling forward past the last slide
+    swiper.on('reachBeginning', () => {
+      // Small delay matches the time Swiper takes to confirm the edge
+      setTimeout(unlockLenis, 300);
+    });
+    
+    swiper.on('reachEnd', () => {
+      setTimeout(unlockLenis, 300);
+    });
+    
+    // --- Re-lock if user scrolls back into the middle of the slider ---
+    swiper.on('fromEdge', () => {
+      lockLenis();
+    });
+    
+    // Safety: make sure Lenis is locked as soon as the snap puts
+    // the Swiper section in the centre of the viewport
+    lenis.on('scroll', () => {
+      const rect = swiperEl.getBoundingClientRect();
+      const viewportCenter = window.innerHeight / 2;
+      const elCenter = rect.top + rect.height / 2;
+      const isCentered = Math.abs(viewportCenter - elCenter) < 10; // px tolerance
+      
+      if (isCentered && !lockedBySwiper) {
+        // Only lock automatically if the pointer is over it
+        // (avoids locking when scrolling past quickly on mobile)
+        lockLenis();
+      }
+    });
+  })();
+
 
 
   // CLIENT SLIDER
