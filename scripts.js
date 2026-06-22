@@ -594,6 +594,8 @@ document.addEventListener('DOMContentLoaded', function() {
       mousewheel: {
         forceToAxis: true,
         sensitivity: 0.75,
+        releaseOnEdges: true,
+        thresholdDelta: 5,
       },
       touchReleaseOnEdges: true,
       threshold: 0,
