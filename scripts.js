@@ -612,7 +612,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // SWIPER INTEGRATION WITH LENIS SNAP LOCK
   
   (function () {
-    const swiperEl = document.querySelector('.swiper.swiper__purpose'); // adjust to your selector
+    const swiperEl = document.querySelector('.swiper');
     if (!swiperEl) return;
     
     const lenis = window.lenis;
@@ -625,97 +625,85 @@ document.addEventListener('DOMContentLoaded', function() {
     
     let swiperActive = false;
     
-    // --- Disable Swiper interaction until snapped into place ---
-    function deactivateSwiper() {
-      swiperActive = false;
-      swiper.mousewheel.disable();
-      swiper.disable(); // disables touch/drag too
-      lenis.start();
-    }
+    // --- State controls (now separated) ---
     
-    function activateSwiper() {
+    function enableSwiper() {
       if (swiperActive) return;
       swiperActive = true;
       swiper.enable();
       swiper.mousewheel.enable();
+      // Lenis intentionally NOT stopped here
+    }
+    
+    function disableSwiper() {
+      swiperActive = false;
+      swiper.mousewheel.disable();
+      swiper.disable();
+      lenis.start(); // always release scroll when swiper goes inactive
+    }
+    
+    function lockScroll() {
+      if (!swiperActive) return;
       lenis.stop();
     }
     
-    // Start in deactivated state
-    deactivateSwiper();
+    function unlockScroll() {
+      lenis.start();
+    }
     
-    // --- Detect when the snap has landed on the Swiper section ---
-    const CENTERED_TOLERANCE = 5; // px — how close to centre counts as "snapped"
+    // Start fully inactive
+    disableSwiper();
+    
+    // --- Snap settle detection ---
+    const CENTERED_TOLERANCE = 5;
     
     function isSwiperCentered() {
       const rect = swiperEl.getBoundingClientRect();
-      const viewportCenter = window.innerHeight / 2;
       const elCenter = rect.top + rect.height / 2;
-      return Math.abs(viewportCenter - elCenter) < CENTERED_TOLERANCE;
+      return Math.abs(window.innerHeight / 2 - elCenter) < CENTERED_TOLERANCE;
     }
     
-    // Poll briefly after each Lenis scrollTo settles to check if we landed on Swiper
-    // Lenis fires a 'scroll' event on every frame during animation; we watch for it stopping (no new events) as the signal that snapping is complete.
     let scrollSettleTimer = null;
     
     lenis.on('scroll', () => {
-      // While scrolling, keep Swiper inactive
       if (swiperActive) return;
-      
       clearTimeout(scrollSettleTimer);
       scrollSettleTimer = setTimeout(() => {
-        // Scroll has settled — check if Swiper is centred
         if (isSwiperCentered()) {
-          activateSwiper();
+          enableSwiper();
+          // Start unlocked — scroll locks only once user moves away from an edge
+          // If already mid-slides somehow, lock immediately
+          if (!swiper.isBeginning && !swiper.isEnd) {
+            lockScroll();
+          }
         }
-      }, 50); // 50 ms after last scroll frame = settled
+      }, 50);
     });
     
-    // --- Edge scroll attempt detection ---
-    // Fires on every wheel event while Swiper is active.
-    // If the user is already at an edge and still scrolling in that direction, deactivate immediately so Lenis can take over.
-    function onWheelAtEdge(e) {
-      if (!swiperActive) return;
-      
-      const scrollingDown = e.deltaY > 0;
-      const scrollingUp = e.deltaY < 0;
-      
-      if ((swiper.isEnd && scrollingDown) || (swiper.isBeginning && scrollingUp)) {
-        deactivateSwiper();
-      }
-    }
+    // --- Swiper event handlers ---
     
-    // Fires on every touch move while Swiper is active.
-    // Track touch direction and deactivate if already at the matching edge.
-    let touchStartY = null;
-    
-    function onTouchStartAtEdge(e) {
-      if (!swiperActive) return;
-      touchStartY = e.touches[0].clientY;
-    }
-    
-    function onTouchMoveAtEdge(e) {
-      if (!swiperActive || touchStartY === null) return;
-      
-      const deltaY = touchStartY - e.touches[0].clientY;
-      const swipingDown = deltaY > 0;
-      const swipingUp = deltaY < 0;
-      
-      if ((swiper.isEnd && swipingDown) || (swiper.isBeginning && swipingUp)) {
-        deactivateSwiper();
-        touchStartY = null;
-      }
-    }
-    
-    swiperEl.addEventListener('wheel', onWheelAtEdge, { passive: true });
-    swiperEl.addEventListener('touchstart', onTouchStartAtEdge, { passive: true });
-    swiperEl.addEventListener('touchmove', onTouchMoveAtEdge, { passive: true });
-    
-    // Keep fromEdge re-lock in case user reverses direction
+    // User moved away from an edge — lock scroll so Swiper handles input
     swiper.on('fromEdge', () => {
-      if (!swiperActive) activateSwiper();
+      lockScroll();
     });
     
+    // User reached an edge — unlock scroll so page can continue
+    swiper.on('reachBeginning', () => {
+      unlockScroll();
+    });
+    
+    swiper.on('reachEnd', () => {
+      unlockScroll();
+    });
+    
+    // When slider leaves the viewport centre (user scrolled away), fully deactivate so it resets cleanly for next visit
+    lenis.on('scroll', () => {
+      if (!swiperActive) return;
+      if (!isSwiperCentered()) {
+        disableSwiper();
+      }
+    });
+  
   })();
 
   
