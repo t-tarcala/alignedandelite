@@ -689,11 +689,11 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // User reached an edge — unlock scroll so page can continue
     swiper.on('reachBeginning', () => {
-      unlockScroll();
+      setTimeout(unlockScroll, 500);
     });
     
     swiper.on('reachEnd', () => {
-      unlockScroll();
+      setTimeout(unlockScroll, 500);
     });
     
     // When slider leaves the viewport centre (user scrolled away), fully deactivate so it resets cleanly for next visit
