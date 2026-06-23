@@ -646,7 +646,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // --- Detect when the snap has landed on the Swiper section ---
     const CENTERED_TOLERANCE = 5; // px — how close to centre counts as "snapped"
-    let snapCheckInterval = null;
     
     function isSwiperCentered() {
       const rect = swiperEl.getBoundingClientRect();
@@ -672,17 +671,47 @@ document.addEventListener('DOMContentLoaded', function() {
       }, 50); // 50 ms after last scroll frame = settled
     });
     
-    // --- When Swiper reaches an edge, deactivate and release Lenis ---
-    function handleEdgeReached() {
-      setTimeout(() => {
+    // --- Edge scroll attempt detection ---
+    // Fires on every wheel event while Swiper is active.
+    // If the user is already at an edge and still scrolling in that direction, deactivate immediately so Lenis can take over.
+    function onWheelAtEdge(e) {
+      if (!swiperActive) return;
+      
+      const scrollingDown = e.deltaY > 0;
+      const scrollingUp = e.deltaY < 0;
+      
+      if ((swiper.isEnd && scrollingDown) || (swiper.isBeginning && scrollingUp)) {
         deactivateSwiper();
-      }, 300); // small delay so the same scroll delta doesn't immediately re-snap
+      }
     }
     
-    swiper.on('reachBeginning', handleEdgeReached);
-    swiper.on('reachEnd', handleEdgeReached);
+    // Fires on every touch move while Swiper is active.
+    // Track touch direction and deactivate if already at the matching edge.
+    let touchStartY = null;
     
-    // --- Re-lock if user reverses back from an edge into the middle slides ---
+    function onTouchStartAtEdge(e) {
+      if (!swiperActive) return;
+      touchStartY = e.touches[0].clientY;
+    }
+    
+    function onTouchMoveAtEdge(e) {
+      if (!swiperActive || touchStartY === null) return;
+      
+      const deltaY = touchStartY - e.touches[0].clientY;
+      const swipingDown = deltaY > 0;
+      const swipingUp = deltaY < 0;
+      
+      if ((swiper.isEnd && swipingDown) || (swiper.isBeginning && swipingUp)) {
+        deactivateSwiper();
+        touchStartY = null;
+      }
+    }
+    
+    swiperEl.addEventListener('wheel', onWheelAtEdge, { passive: true });
+    swiperEl.addEventListener('touchstart', onTouchStartAtEdge, { passive: true });
+    swiperEl.addEventListener('touchmove', onTouchMoveAtEdge, { passive: true });
+    
+    // Keep fromEdge re-lock in case user reverses direction
     swiper.on('fromEdge', () => {
       if (!swiperActive) activateSwiper();
     });
