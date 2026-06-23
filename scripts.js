@@ -605,12 +605,12 @@ document.addEventListener('DOMContentLoaded', function() {
       freeMode: false,
       effect: 'fade',
       fadeEffect: {
-        crossFade: true
+        crossFade: true,
       },
       pagination: {
         el: fractionPagination,
         type: 'fraction',
-      }
+      },
     });
   });
 
