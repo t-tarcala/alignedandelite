@@ -583,6 +583,8 @@ document.addEventListener('DOMContentLoaded', function() {
   const purposeSliderComponents = document.querySelectorAll('.purpose-slider-component');
   
   purposeSliderComponents.forEach(purposeSliderComponent => {
+
+    const pagination = purposeSliderComponent.querySelector('.purpose-slider__pagination');
     
     const purposeSlider = new Swiper('.swiper.swiper__purpose', {
       // Optional parameters
@@ -605,6 +607,10 @@ document.addEventListener('DOMContentLoaded', function() {
       fadeEffect: {
         crossFade: true
       },
+      pagination: {
+        el: pagination,
+        type: fraction,
+      }
     });
   });
 
