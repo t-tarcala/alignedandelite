@@ -578,13 +578,15 @@ document.addEventListener('DOMContentLoaded', function() {
   const kathleen = document.querySelector('.coach-pro.kathleen');
 
   mm.add("(min-aspect-ratio: 1/0.99999999)", () => {
-    
+
+    /*
     gsap.set(marisa, { xPercent: 100, opacity: 0 });
     gsap.set(kathleen, { xPercent: -100, opacity: 0 });
+    */
     
-    gsap.to(marisa, {
-      xPercent: 0,
-      opacity: 1,
+    gsap.from(marisa, {
+      xPercent: 100,
+      opacity: 0,
       ease: "power1.inOut",
       scrollTrigger: {
         trigger: coachProComp,
