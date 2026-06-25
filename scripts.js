@@ -434,128 +434,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-  // COACHING PROS ANIMATION
-  
-  const coachProComp = document.querySelectorAll('.coach-pro-component');
-  
-  const joe = document.querySelector('.coach-pro.joe');
-  const marisa = document.querySelector('.coach-pro.marisa');
-  const kathleen = document.querySelector('.coach-pro.kathleen');
-  
-  const coachLine = document.querySelector('.coach-pro__line');
-  const coachTexts = document.querySelectorAll('.coach-pro__text-wrap');
-  const coachPics = document.querySelectorAll('.coach-pro__pic-wrap');
-  const coachFrames = document.querySelectorAll('.coach-pro__frame');
-  
-  const coachLogoDiamond = document.querySelector('#logoDiamond');
-  const coachLogoSquare = document.querySelector('#logoSquare');
-  const coachLogoAE = document.querySelector('#logoAE');
-  const coachLogoMask = document.querySelector('#logoMask');
-  
-  const coachLogo = document.querySelector('.coach-pro__logo-wrap');
-  const coachNextSec = document.querySelector('#coachNextSec');
-  
-  const clrPrimary400 = computedStyle.getPropertyValue("--clr_primary-400");
-  const clrPrimary700 = computedStyle.getPropertyValue("--clr_primary-700");
-  
-  mm.add("(min-aspect-ratio: 1/0.99999999)", () => {
-    gsap.set(coachLine, { scaleX: 4 });
-    gsap.set(coachLogoDiamond, { opacity: 0, scale: 1.5, color: clrPrimary400 });
-    gsap.set(coachLogoSquare, { opacity: 0, scale: 1, color: clrPrimary400 });
-    gsap.set(coachLogoMask, { opacity: 0, scale: 1.5 });
-    gsap.set(coachLogoAE, { opacity: 0, scale: 1.7 });
-    
-    const coachTl = gsap.timeline({ defaults: { ease: "power1.inOut" } })
-      .to(joe, { xPercent: 0, duration: 1 }, "phase0")
-      .to(marisa, { xPercent: 125, duration: 4 }, "phase1")
-      .to(kathleen, { xPercent: -125, duration: 4 }, "phase1")
-      .to(coachLine, { scaleX: 1, duration: 4 }, "phase1")
-      .to(coachTexts, { opacity: 0, duration: 2 }, "phase1+=1")
-      .to(coachPics, { opacity: 0, scale: 1.5, duration: 3 }, "phase1+=1")
-      .to(coachFrames, { color: clrPrimary700, scale: 1.5, duration: 3 }, "phase1+=1")
-      .to(coachLogoMask, { opacity: 1, duration: 1 }, "phase1+=3")
-      .to(coachLine, { opacity: 0, duration: 0 }, "phase2")
-      .to(coachFrames, { opacity: 0, duration: 0 }, "phase2")
-      .to(coachLogoDiamond, { opacity: 1, duration: 0 }, "phase2")
-      .to(coachLogoSquare, { opacity: 1, duration: 0 }, "phase2")
-      .to(coachLogoSquare, { scale: 1.5, duration: 2 }, "phase3")
-      .to(coachLogoAE, { opacity: 1, scale: 1.5, duration: 1 }, "phase3+=1")
-      .to(joe, { xPercent: 0, duration: 1 }, "phase4")
-      
-    ScrollTrigger.create({
-      animation: coachTl,
-      trigger: coachProComp,
-      start: "center center",
-      end: () => `+=${window.innerWidth * 1.5} bottom`,
-      scrub: 0.5,
-      pin: true,
-      pinSpacing: true,
-      markers: false,
-    });
-  });
-  
-  mm.add("(max-aspect-ratio: 1/1)", () => {
-    gsap.set(joe, { scale: 0.95, opacity: 0 });
-    gsap.set(kathleen, { scale: 0.95, opacity: 0 });
-    gsap.set(coachLogoDiamond, { opacity: 0, scale: 0.8, color: clrPrimary400 });
-    gsap.set(coachLogoSquare, { opacity: 0, scale: 0.5, color: clrPrimary400 });
-    gsap.set(coachLogoMask, { opacity: 0, scale: 0.8 });
-    gsap.set(coachLogoAE, { opacity: 0, scale: 0.9 });
-    
-    const coachTl = gsap.timeline({ defaults: { ease: "power1.inOut" } })
-      .to(marisa, { opacity: 1, duration: 1 }, "start")
-      .to(marisa, { scale: 0.95, duration: 0.75 }, "switch1")
-      .to(marisa, { scale: 1, opacity: 0, duration: 0.75 }, "switch1+=0.75")
-      .to(joe, { scale: 1, opacity: 1, duration: 0.75 }, "switch1+=0.75")
-      .to(coachTexts, { opacity: 0, duration: 0.5 }, "switch1")
-      .to(coachTexts, { opacity: 1, duration: 0.5 }, "switch1+=1")
-      .to(joe, { opacity: 1, duration: 1.5 }, "pause1")
-      .to(joe, { scale: 0.95, duration: 0.75 }, "switch2")
-      .to(joe, { scale: 1, opacity: 0, duration: 0.75 }, "switch2+=0.75")
-      .to(kathleen, { scale: 1, opacity: 1, duration: 0.75 }, "switch2+=0.75")
-      .to(coachTexts, { opacity: 0, duration: 0.5 }, "switch2")
-      .to(coachTexts, { opacity: 1, duration: 0.5 }, "switch2+=1")
-      .to(kathleen, { opacity: 1, duration: 1.5 }, "pause2")
-      .to(coachPics, { opacity: 0, scale: 0.8, duration: 1 }, "logo1")
-      .to(coachFrames, { color: clrPrimary700, scale: 0.8, duration: 1 }, "logo1")
-      .to(coachTexts, { opacity: 0, duration: 1 }, "logo1")
-      .to(coachLogoMask, { opacity: 1, scale: 0.8, duration: 0.5 }, "logo1+=0.5")
-      .to(coachFrames, { opacity: 0, duration: 0 }, "logo2")
-      .to(coachLogoDiamond, { opacity: 1, duration: 0 }, "logo2")
-      .to(coachLogoSquare, { opacity: 1, duration: 0 }, "logo2")
-      .to(coachLogoDiamond, { scale: 1, duration: 4, ease: "elastic.out(1,0.5)" }, "logo3")
-      .to(coachLogoMask, { scale: 1, duration: 4, ease: "elastic.out(1,0.5)" }, "logo3")
-      .to(coachLogoSquare, { scale: 1, duration: 4, ease: "elastic.out(1,0.75)" }, "logo3")
-      .to(coachLogoAE, { opacity: 1, scale: 1, duration: 3, ease: "elastic.out(1,0.75)" }, "logo3+=1")
-      .to(marisa, { opacity: 0, duration: 1 }, "end")
-    
-    ScrollTrigger.create({
-      animation: coachTl,
-      trigger: coachProComp,
-      start: "center center",
-      end: () => `+=${window.innerWidth * 4} bottom`,
-      scrub: 0.5,
-      pin: true,
-      pinSpacing: true,
-      markers: false,
-    });
-  });
-  
-  gsap.to(coachLogo, {
-    scale: 1.5,
-    yPercent: -1,
-    ease: "power2.in",
-    scrollTrigger: {
-      trigger: coachNextSec,
-      start: "top bottom",
-      end: "bottom center",
-      scrub: 0.5,
-      markers: false,
-    },
-  });
-
-
-
   // NAVBAR DARK SECTION ANIMATIONS
 
   const navbar = document.querySelector('.navbar');
@@ -834,6 +712,128 @@ document.addEventListener('DOMContentLoaded', function() {
       end: "400px top",
       scrub: true,
       pin: false,
+      markers: false,
+    },
+  });
+
+
+
+  // COACHING PROS ANIMATION
+  
+  const coachProComp = document.querySelectorAll('.coach-pro-component');
+  
+  const joe = document.querySelector('.coach-pro.joe');
+  const marisa = document.querySelector('.coach-pro.marisa');
+  const kathleen = document.querySelector('.coach-pro.kathleen');
+  
+  const coachLine = document.querySelector('.coach-pro__line');
+  const coachTexts = document.querySelectorAll('.coach-pro__text-wrap');
+  const coachPics = document.querySelectorAll('.coach-pro__pic-wrap');
+  const coachFrames = document.querySelectorAll('.coach-pro__frame');
+  
+  const coachLogoDiamond = document.querySelector('#logoDiamond');
+  const coachLogoSquare = document.querySelector('#logoSquare');
+  const coachLogoAE = document.querySelector('#logoAE');
+  const coachLogoMask = document.querySelector('#logoMask');
+  
+  const coachLogo = document.querySelector('.coach-pro__logo-wrap');
+  const coachNextSec = document.querySelector('#coachNextSec');
+  
+  const clrPrimary400 = computedStyle.getPropertyValue("--clr_primary-400");
+  const clrPrimary700 = computedStyle.getPropertyValue("--clr_primary-700");
+  
+  mm.add("(min-aspect-ratio: 1/0.99999999)", () => {
+    gsap.set(coachLine, { scaleX: 4 });
+    gsap.set(coachLogoDiamond, { opacity: 0, scale: 1.5, color: clrPrimary400 });
+    gsap.set(coachLogoSquare, { opacity: 0, scale: 1, color: clrPrimary400 });
+    gsap.set(coachLogoMask, { opacity: 0, scale: 1.5 });
+    gsap.set(coachLogoAE, { opacity: 0, scale: 1.7 });
+    
+    const coachTl = gsap.timeline({ defaults: { ease: "power1.inOut" } })
+      .to(joe, { xPercent: 0, duration: 1 }, "phase0")
+      .to(marisa, { xPercent: 125, duration: 4 }, "phase1")
+      .to(kathleen, { xPercent: -125, duration: 4 }, "phase1")
+      .to(coachLine, { scaleX: 1, duration: 4 }, "phase1")
+      .to(coachTexts, { opacity: 0, duration: 2 }, "phase1+=1")
+      .to(coachPics, { opacity: 0, scale: 1.5, duration: 3 }, "phase1+=1")
+      .to(coachFrames, { color: clrPrimary700, scale: 1.5, duration: 3 }, "phase1+=1")
+      .to(coachLogoMask, { opacity: 1, duration: 1 }, "phase1+=3")
+      .to(coachLine, { opacity: 0, duration: 0 }, "phase2")
+      .to(coachFrames, { opacity: 0, duration: 0 }, "phase2")
+      .to(coachLogoDiamond, { opacity: 1, duration: 0 }, "phase2")
+      .to(coachLogoSquare, { opacity: 1, duration: 0 }, "phase2")
+      .to(coachLogoSquare, { scale: 1.5, duration: 2 }, "phase3")
+      .to(coachLogoAE, { opacity: 1, scale: 1.5, duration: 1 }, "phase3+=1")
+      .to(joe, { xPercent: 0, duration: 1 }, "phase4")
+      
+    ScrollTrigger.create({
+      animation: coachTl,
+      trigger: coachProComp,
+      start: "center center",
+      end: () => `+=${window.innerWidth * 1.5} bottom`,
+      scrub: 0.5,
+      pin: true,
+      pinSpacing: true,
+      markers: false,
+    });
+  });
+  
+  mm.add("(max-aspect-ratio: 1/1)", () => {
+    gsap.set(joe, { scale: 0.95, opacity: 0 });
+    gsap.set(kathleen, { scale: 0.95, opacity: 0 });
+    gsap.set(coachLogoDiamond, { opacity: 0, scale: 0.8, color: clrPrimary400 });
+    gsap.set(coachLogoSquare, { opacity: 0, scale: 0.5, color: clrPrimary400 });
+    gsap.set(coachLogoMask, { opacity: 0, scale: 0.8 });
+    gsap.set(coachLogoAE, { opacity: 0, scale: 0.9 });
+    
+    const coachTl = gsap.timeline({ defaults: { ease: "power1.inOut" } })
+      .to(marisa, { opacity: 1, duration: 1 }, "start")
+      .to(marisa, { scale: 0.95, duration: 0.75 }, "switch1")
+      .to(marisa, { scale: 1, opacity: 0, duration: 0.75 }, "switch1+=0.75")
+      .to(joe, { scale: 1, opacity: 1, duration: 0.75 }, "switch1+=0.75")
+      .to(coachTexts, { opacity: 0, duration: 0.5 }, "switch1")
+      .to(coachTexts, { opacity: 1, duration: 0.5 }, "switch1+=1")
+      .to(joe, { opacity: 1, duration: 1.5 }, "pause1")
+      .to(joe, { scale: 0.95, duration: 0.75 }, "switch2")
+      .to(joe, { scale: 1, opacity: 0, duration: 0.75 }, "switch2+=0.75")
+      .to(kathleen, { scale: 1, opacity: 1, duration: 0.75 }, "switch2+=0.75")
+      .to(coachTexts, { opacity: 0, duration: 0.5 }, "switch2")
+      .to(coachTexts, { opacity: 1, duration: 0.5 }, "switch2+=1")
+      .to(kathleen, { opacity: 1, duration: 1.5 }, "pause2")
+      .to(coachPics, { opacity: 0, scale: 0.8, duration: 1 }, "logo1")
+      .to(coachFrames, { color: clrPrimary700, scale: 0.8, duration: 1 }, "logo1")
+      .to(coachTexts, { opacity: 0, duration: 1 }, "logo1")
+      .to(coachLogoMask, { opacity: 1, scale: 0.8, duration: 0.5 }, "logo1+=0.5")
+      .to(coachFrames, { opacity: 0, duration: 0 }, "logo2")
+      .to(coachLogoDiamond, { opacity: 1, duration: 0 }, "logo2")
+      .to(coachLogoSquare, { opacity: 1, duration: 0 }, "logo2")
+      .to(coachLogoDiamond, { scale: 1, duration: 4, ease: "elastic.out(1,0.5)" }, "logo3")
+      .to(coachLogoMask, { scale: 1, duration: 4, ease: "elastic.out(1,0.5)" }, "logo3")
+      .to(coachLogoSquare, { scale: 1, duration: 4, ease: "elastic.out(1,0.75)" }, "logo3")
+      .to(coachLogoAE, { opacity: 1, scale: 1, duration: 3, ease: "elastic.out(1,0.75)" }, "logo3+=1")
+      .to(marisa, { opacity: 0, duration: 1 }, "end")
+    
+    ScrollTrigger.create({
+      animation: coachTl,
+      trigger: coachProComp,
+      start: "center center",
+      end: () => `+=${window.innerWidth * 4} bottom`,
+      scrub: 0.5,
+      pin: true,
+      pinSpacing: true,
+      markers: false,
+    });
+  });
+  
+  gsap.to(coachLogo, {
+    scale: 1.5,
+    yPercent: -1,
+    ease: "power2.in",
+    scrollTrigger: {
+      trigger: coachNextSec,
+      start: "top bottom",
+      end: "bottom center",
+      scrub: 0.5,
       markers: false,
     },
   });
