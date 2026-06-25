@@ -556,6 +556,26 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
+  // NAVBAR DARK SECTION ANIMATIONS
+
+  const navbar = document.querySelector('.navbar');
+  const darkSections = document. querySelectorAll('[data-is-dark]');
+
+  darkSections.forEach(darkSection => {
+
+    ScrollTrigger.create({
+      trigger: darkSection,
+      start: `top ${navbar.offsetHeight}px`,
+      end: `bottom ${navbar.offsetHeight}px`,
+      onEnter: () => navbar.classList.add('navbar--dark'),
+      onLeave: () => navbar.classList.remove('navbar--dark'),
+      onEnterBack: () => navbar.classList.add('navbar--dark'),
+      onLeaveBack: () => navbar.classList.remove('navbar--dark'),
+    });
+    
+  });
+
+
   // FOOTER ANIMATION
   
   const footer = document.querySelector(".footer__wrap");
@@ -695,11 +715,11 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // User reached an edge — unlock scroll so page can continue
     swiper.on('reachBeginning', () => {
-      setTimeout(unlockScroll, 500);
+      setTimeout(unlockScroll, 800);
     });
     
     swiper.on('reachEnd', () => {
-      setTimeout(unlockScroll, 500);
+      setTimeout(unlockScroll, 800);
     });
     
     // When slider leaves the viewport centre (user scrolled away), fully deactivate so it resets cleanly for next visit
