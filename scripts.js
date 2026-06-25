@@ -143,6 +143,48 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
+  // NAVBAR DARK SECTION ANIMATIONS
+
+  const navbar = document.querySelector('.navbar');
+  const darkSections = document. querySelectorAll('[data-is-dark]');
+
+  darkSections.forEach(darkSection => {
+
+    ScrollTrigger.create({
+      trigger: darkSection,
+      start: `top ${navbar.offsetHeight}px`,
+      end: `bottom ${navbar.offsetHeight}px`,
+      onEnter: () => navbar.classList.add('navbar--dark'),
+      onLeave: () => navbar.classList.remove('navbar--dark'),
+      onEnterBack: () => navbar.classList.add('navbar--dark'),
+      onLeaveBack: () => navbar.classList.remove('navbar--dark'),
+    });
+    
+  });
+
+
+  // FOOTER ANIMATION
+  
+  const footer = document.querySelector(".footer__wrap");
+  const footerLogo = document.querySelector(".footer__logo-wrap");
+  
+  gsap.set(footerLogo, { scale: 0.8, opacity: 0.5 });
+  
+  gsap.to(footerLogo, {
+    scale: 1,
+    opacity: 1,
+    ease: "power1.inOut",
+    scrollTrigger: {
+      trigger: footer,
+      start: "top bottom",
+      end: "bottom bottom",
+      scrub: 0.5,
+      markers: false,
+    },
+  });
+
+
+
   // HERO ANIMATION
   
   const hero = document.querySelector(".section__hero_full-page");
@@ -192,6 +234,142 @@ document.addEventListener('DOMContentLoaded', function() {
     },
   });
   */
+
+
+
+  // PURPOSE SLIDER
+  
+  const purposeSliderComponents = document.querySelectorAll('.purpose-slider-component');
+  
+  purposeSliderComponents.forEach(purposeSliderComponent => {
+
+    const fractionPagination = purposeSliderComponent.querySelector('.purpose-slider__pagination');
+    
+    const purposeSlider = new Swiper('.swiper.swiper__purpose', {
+      // Optional parameters
+      loop: false,
+      slidesPerView: 1,
+      speed: 400,
+      centeredSlides: true,
+      direction: 'vertical',
+      mousewheel: {
+        forceToAxis: true,
+        sensitivity: 0.75,
+        releaseOnEdges: true,
+        thresholdDelta: 5,
+      },
+      touchReleaseOnEdges: true,
+      threshold: 0,
+      grabCursor: false,
+      freeMode: false,
+      effect: 'fade',
+      fadeEffect: {
+        crossFade: true,
+      },
+      pagination: {
+        el: fractionPagination,
+        type: 'fraction',
+      },
+    });
+  });
+
+  
+  // SWIPER INTEGRATION WITH LENIS SNAP LOCK
+  
+  (function () {
+    const swiperEl = document.querySelector('.swiper');
+    if (!swiperEl) return;
+    
+    const lenis = window.lenis;
+    const swiper = swiperEl.swiper;
+    
+    if (!swiper) {
+      console.warn('Swiper instance not found on element.');
+      return;
+    }
+    
+    let swiperActive = false;
+    
+    // --- State controls (now separated) ---
+    
+    function enableSwiper() {
+      if (swiperActive) return;
+      swiperActive = true;
+      swiper.enable();
+      swiper.mousewheel.enable();
+      // Lenis intentionally NOT stopped here
+    }
+    
+    function disableSwiper() {
+      swiperActive = false;
+      swiper.mousewheel.disable();
+      swiper.disable();
+      lenis.start(); // always release scroll when swiper goes inactive
+    }
+    
+    function lockScroll() {
+      if (!swiperActive) return;
+      lenis.stop();
+    }
+    
+    function unlockScroll() {
+      lenis.start();
+    }
+    
+    // Start fully inactive
+    disableSwiper();
+    
+    // --- Snap settle detection ---
+    const CENTERED_TOLERANCE = 5;
+    
+    function isSwiperCentered() {
+      const rect = swiperEl.getBoundingClientRect();
+      const elCenter = rect.top + rect.height / 2;
+      return Math.abs(window.innerHeight / 2 - elCenter) < CENTERED_TOLERANCE;
+    }
+    
+    let scrollSettleTimer = null;
+    
+    lenis.on('scroll', () => {
+      if (swiperActive) return;
+      clearTimeout(scrollSettleTimer);
+      scrollSettleTimer = setTimeout(() => {
+        if (isSwiperCentered()) {
+          enableSwiper();
+          // Start unlocked — scroll locks only once user moves away from an edge
+          // If already mid-slides somehow, lock immediately
+          if (!swiper.isBeginning && !swiper.isEnd) {
+            lockScroll();
+          }
+        }
+      }, 50);
+    });
+    
+    // --- Swiper event handlers ---
+    
+    // User moved away from an edge — lock scroll so Swiper handles input
+    swiper.on('fromEdge', () => {
+      lockScroll();
+    });
+    
+    // User reached an edge — unlock scroll so page can continue
+    swiper.on('reachBeginning', () => {
+      setTimeout(unlockScroll, 800);
+    });
+    
+    swiper.on('reachEnd', () => {
+      setTimeout(unlockScroll, 800);
+    });
+    
+    // When slider leaves the viewport centre (user scrolled away), fully deactivate so it resets cleanly for next visit
+    lenis.on('scroll', () => {
+      if (!swiperActive) return;
+      if (!isSwiperCentered()) {
+        disableSwiper();
+      }
+    });
+  
+  })();
 
 
 
@@ -353,261 +531,6 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     }});
     
-  })();  
-    
-    
-  // PURPOSE HIGHLIGHTS ANIMATION
-  
-  const purposeWrap = gsap.utils.toArray('.purpose-highlight__wrap');
-  const purposeIntro = gsap.utils.toArray('.purpose-highlight__intro-wrap');
-  const purposeIntroText = gsap.utils.toArray('.purpose-highlight__intro-text');
-  const purposeHighlights = gsap.utils.toArray('.purpose-highlight__grid');
-  
-  purposeHighlights.forEach(purposeHighlight => {
-    
-    const purposeTitle = gsap.utils.toArray('.purpose-highlight__title', purposeHighlight);
-    const purposeText = gsap.utils.toArray('.purpose-highlight__text', purposeHighlight);
-    const purposeIcon = gsap.utils.toArray('.purpose-highlight__icon-wrap', purposeHighlight);
-    
-    mm.add("(min-width: 768px)", () => {
-      
-      gsap.set(purposeText, { opacity: 0, xPercent: 10 });
-      
-      gsap.to(purposeText, {
-        opacity: 1,
-        xPercent: 0,
-        duration: 0.4,
-        ease: "power1.inOut",
-        scrollTrigger: {
-          trigger: purposeHighlight,
-          start: "top center",
-          end: "bottom center",
-          toggleActions: "play reverse play reverse",
-          scrub: false,
-        },
-      });
-      
-      gsap.set(purposeIntroText, { opacity: 0 });
-      
-      gsap.to(purposeIntroText, {
-        opacity: 1,
-        duration: 0.4,
-        ease: "power1.inOut",
-        scrollTrigger: {
-          trigger: purposeWrap,
-          start: "top center",
-          end: "bottom center",
-          toggleActions: "play reverse play reverse",
-          scrub: false,
-          markers: false,
-        },
-      });
-    });
-
-    gsap.to(purposeTitle, {
-      color: "var(--clr_highlight-A-100)",
-      duration: 0.4,
-      ease: "power1.inOut",
-      scrollTrigger: {
-        trigger: purposeHighlight,
-        start: "top center",
-        end: "bottom center",
-        toggleActions: "play reverse play reverse",
-        scrub: false,
-      },
-    });
-    
-    gsap.to(purposeIcon, {
-      color: "var(--clr_highlight-A-100)",
-      duration: 0.4,
-      ease: "power1.inOut",
-      scrollTrigger: {
-        trigger: purposeHighlight,
-        start: "top center",
-        end: "bottom center",
-        toggleActions: "play reverse play reverse",
-        scrub: false,
-      },
-    });
-    
-  });
-
-
-
-  // NAVBAR DARK SECTION ANIMATIONS
-
-  const navbar = document.querySelector('.navbar');
-  const darkSections = document. querySelectorAll('[data-is-dark]');
-
-  darkSections.forEach(darkSection => {
-
-    ScrollTrigger.create({
-      trigger: darkSection,
-      start: `top ${navbar.offsetHeight}px`,
-      end: `bottom ${navbar.offsetHeight}px`,
-      onEnter: () => navbar.classList.add('navbar--dark'),
-      onLeave: () => navbar.classList.remove('navbar--dark'),
-      onEnterBack: () => navbar.classList.add('navbar--dark'),
-      onLeaveBack: () => navbar.classList.remove('navbar--dark'),
-    });
-    
-  });
-
-
-  // FOOTER ANIMATION
-  
-  const footer = document.querySelector(".footer__wrap");
-  const footerLogo = document.querySelector(".footer__logo-wrap");
-  
-  gsap.set(footerLogo, { scale: 0.8, opacity: 0.5 });
-  
-  gsap.to(footerLogo, {
-    scale: 1,
-    opacity: 1,
-    ease: "power1.inOut",
-    scrollTrigger: {
-      trigger: footer,
-      start: "top bottom",
-      end: "bottom bottom",
-      scrub: 0.5,
-      markers: false,
-    },
-  });
-
-
-
-  // PURPOSE SLIDER
-  
-  const purposeSliderComponents = document.querySelectorAll('.purpose-slider-component');
-  
-  purposeSliderComponents.forEach(purposeSliderComponent => {
-
-    const fractionPagination = purposeSliderComponent.querySelector('.purpose-slider__pagination');
-    
-    const purposeSlider = new Swiper('.swiper.swiper__purpose', {
-      // Optional parameters
-      loop: false,
-      slidesPerView: 1,
-      speed: 400,
-      centeredSlides: true,
-      direction: 'vertical',
-      mousewheel: {
-        forceToAxis: true,
-        sensitivity: 0.75,
-        releaseOnEdges: true,
-        thresholdDelta: 5,
-      },
-      touchReleaseOnEdges: true,
-      threshold: 0,
-      grabCursor: false,
-      freeMode: false,
-      effect: 'fade',
-      fadeEffect: {
-        crossFade: true,
-      },
-      pagination: {
-        el: fractionPagination,
-        type: 'fraction',
-      },
-    });
-  });
-
-  
-  // SWIPER INTEGRATION WITH LENIS SNAP LOCK
-  
-  (function () {
-    const swiperEl = document.querySelector('.swiper');
-    if (!swiperEl) return;
-    
-    const lenis = window.lenis;
-    const swiper = swiperEl.swiper;
-    
-    if (!swiper) {
-      console.warn('Swiper instance not found on element.');
-      return;
-    }
-    
-    let swiperActive = false;
-    
-    // --- State controls (now separated) ---
-    
-    function enableSwiper() {
-      if (swiperActive) return;
-      swiperActive = true;
-      swiper.enable();
-      swiper.mousewheel.enable();
-      // Lenis intentionally NOT stopped here
-    }
-    
-    function disableSwiper() {
-      swiperActive = false;
-      swiper.mousewheel.disable();
-      swiper.disable();
-      lenis.start(); // always release scroll when swiper goes inactive
-    }
-    
-    function lockScroll() {
-      if (!swiperActive) return;
-      lenis.stop();
-    }
-    
-    function unlockScroll() {
-      lenis.start();
-    }
-    
-    // Start fully inactive
-    disableSwiper();
-    
-    // --- Snap settle detection ---
-    const CENTERED_TOLERANCE = 5;
-    
-    function isSwiperCentered() {
-      const rect = swiperEl.getBoundingClientRect();
-      const elCenter = rect.top + rect.height / 2;
-      return Math.abs(window.innerHeight / 2 - elCenter) < CENTERED_TOLERANCE;
-    }
-    
-    let scrollSettleTimer = null;
-    
-    lenis.on('scroll', () => {
-      if (swiperActive) return;
-      clearTimeout(scrollSettleTimer);
-      scrollSettleTimer = setTimeout(() => {
-        if (isSwiperCentered()) {
-          enableSwiper();
-          // Start unlocked — scroll locks only once user moves away from an edge
-          // If already mid-slides somehow, lock immediately
-          if (!swiper.isBeginning && !swiper.isEnd) {
-            lockScroll();
-          }
-        }
-      }, 50);
-    });
-    
-    // --- Swiper event handlers ---
-    
-    // User moved away from an edge — lock scroll so Swiper handles input
-    swiper.on('fromEdge', () => {
-      lockScroll();
-    });
-    
-    // User reached an edge — unlock scroll so page can continue
-    swiper.on('reachBeginning', () => {
-      setTimeout(unlockScroll, 800);
-    });
-    
-    swiper.on('reachEnd', () => {
-      setTimeout(unlockScroll, 800);
-    });
-    
-    // When slider leaves the viewport centre (user scrolled away), fully deactivate so it resets cleanly for next visit
-    lenis.on('scroll', () => {
-      if (!swiperActive) return;
-      if (!isSwiperCentered()) {
-        disableSwiper();
-      }
-    });
-  
   })();
 
   
@@ -714,6 +637,84 @@ document.addEventListener('DOMContentLoaded', function() {
       pin: false,
       markers: false,
     },
+  });
+
+
+
+  // PURPOSE HIGHLIGHTS ANIMATION
+  
+  const purposeWrap = gsap.utils.toArray('.purpose-highlight__wrap');
+  const purposeIntro = gsap.utils.toArray('.purpose-highlight__intro-wrap');
+  const purposeIntroText = gsap.utils.toArray('.purpose-highlight__intro-text');
+  const purposeHighlights = gsap.utils.toArray('.purpose-highlight__grid');
+  
+  purposeHighlights.forEach(purposeHighlight => {
+    
+    const purposeTitle = gsap.utils.toArray('.purpose-highlight__title', purposeHighlight);
+    const purposeText = gsap.utils.toArray('.purpose-highlight__text', purposeHighlight);
+    const purposeIcon = gsap.utils.toArray('.purpose-highlight__icon-wrap', purposeHighlight);
+    
+    mm.add("(min-width: 768px)", () => {
+      
+      gsap.set(purposeText, { opacity: 0, xPercent: 10 });
+      
+      gsap.to(purposeText, {
+        opacity: 1,
+        xPercent: 0,
+        duration: 0.4,
+        ease: "power1.inOut",
+        scrollTrigger: {
+          trigger: purposeHighlight,
+          start: "top center",
+          end: "bottom center",
+          toggleActions: "play reverse play reverse",
+          scrub: false,
+        },
+      });
+      
+      gsap.set(purposeIntroText, { opacity: 0 });
+      
+      gsap.to(purposeIntroText, {
+        opacity: 1,
+        duration: 0.4,
+        ease: "power1.inOut",
+        scrollTrigger: {
+          trigger: purposeWrap,
+          start: "top center",
+          end: "bottom center",
+          toggleActions: "play reverse play reverse",
+          scrub: false,
+          markers: false,
+        },
+      });
+    });
+
+    gsap.to(purposeTitle, {
+      color: "var(--clr_highlight-A-100)",
+      duration: 0.4,
+      ease: "power1.inOut",
+      scrollTrigger: {
+        trigger: purposeHighlight,
+        start: "top center",
+        end: "bottom center",
+        toggleActions: "play reverse play reverse",
+        scrub: false,
+      },
+    });
+    
+    gsap.to(purposeIcon, {
+      color: "var(--clr_highlight-A-100)",
+      duration: 0.4,
+      ease: "power1.inOut",
+      scrollTrigger: {
+        trigger: purposeHighlight,
+        start: "top center",
+        end: "bottom center",
+        toggleActions: "play reverse play reverse",
+        scrub: false,
+      },
+    });
+    
   });
 
 
