@@ -239,18 +239,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // PURPOSE IMAGES
 
+  const purposeImageCol = document.querySelectorAll('.intro-img-col');
+  
   const purposeImageLeft = document.querySelector('#purposeImageLeft');
   const purposeImageRight = document.querySelector('#purposeImageRight');
 
+  gsap.set (purposeImageCol, { transformStyle: "preserve-3d", transformPerspective: 1000 });
   gsap.set (purposeImageLeft, { transformStyle: "preserve-3d", transformOrigin: "50% 50%" });
 
   gsap.fromTo(purposeImageLeft,
               {
-                yPercent: -10,
+                yPercent: 0,
                 rotateY: -5,
               },
               {
-                yPercent: 10,
+                yPercent: 20,
                 rotateY: 5,
                 ease: 'power1.inOut',
                 scrollTrigger: {
