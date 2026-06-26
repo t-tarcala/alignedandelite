@@ -579,13 +579,44 @@ document.addEventListener('DOMContentLoaded', function() {
 
   mm.add("(min-aspect-ratio: 1/0.99999999)", () => {
 
+    const marisaTween = gsap.from(marisa, {
+      xPercent: 100,
+      opacity: 0,
+      ease: "power1.inOut",
+      paused: true, // ScrollTrigger will control playback
+    });
+
+    const kathleenTween = gsap.from(kathleen, {
+      xPercent: -100,
+      opacity: 0,
+      ease: "power1.inOut",
+      paused: true,
+    });
+
     ScrollTrigger.create({
       trigger: coachProComp,
       start: "top bottom",
       end: "top center",
       markers: true,
       scrub: 0.5,
-      onEnter: () => gsap.from(marisa, { xPercent: 100, opacity: 0, ease: "power1.inOut", }),
+      animation: mariasaTween,
+      onLeave: (self) => {
+        gsap.set(marisa, { xPercent: 0, opacity: 1 }); // snap to final state
+        self.kill();
+      },
+    });
+
+    ScrollTrigger.create({
+      trigger: coachProComp,
+      start: "top bottom",
+      end: "top center",
+      markers: true,
+      scrub: 0.5,
+      animation: kathleenTween,
+      onLeave: (self) => {
+        gsap.set(kathleen, { xPercent: 0, opacity: 1 });
+        self.kill();
+      },
     });
     
     /*
