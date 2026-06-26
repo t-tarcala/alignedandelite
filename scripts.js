@@ -579,19 +579,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
   mm.add("(min-aspect-ratio: 1/0.99999999)", () => {
 
-    const marisaTween = gsap.from(marisa, {
-      xPercent: 100,
-      opacity: 0,
-      ease: "power1.inOut",
-      paused: true, // ScrollTrigger will control playback
-    });
-
-    const kathleenTween = gsap.from(kathleen, {
-      xPercent: -100,
-      opacity: 0,
-      ease: "power1.inOut",
-      paused: true,
-    });
+    const tl = gsap.timeline({ paused: true });
+    
+    tl.from(marisa,  { xPercent:  100, opacity: 0, ease: "power1.inOut" }, 0)
+      .from(kathleen,{ xPercent:  -100, opacity: 0, ease: "power1.inOut" }, 0);
 
     ScrollTrigger.create({
       trigger: coachProComp,
@@ -599,44 +590,13 @@ document.addEventListener('DOMContentLoaded', function() {
       end: "top center",
       markers: true,
       scrub: 0.5,
-      animation: marisaTween,
-      toggleActions: "play none none none",
-      /*
+      animation: tl,
+      //toggleActions: "play none none none",
       onLeave: (self) => {
-        gsap.set(marisa, { xPercent: 0, opacity: 1, }); // snap to final state
+        gsap.set([marisa, kathleen], { xPercent: 0, opacity: 1, overwrite: true, }); // snap to final state
         self.kill();
-      },*/
-    });
-
-    ScrollTrigger.create({
-      trigger: coachProComp,
-      start: "top bottom",
-      end: "top center",
-      markers: false,
-      scrub: 0.5,
-      animation: kathleenTween,
-      toggleActions: "play none none none",
-      /*
-      onLeave: (self) => {
-        gsap.set(kathleen, { xPercent: 0, opacity: 1 });
-        self.kill();
-      },*/
-    });
-    
-    /*
-    gsap.from(marisa, {
-      xPercent: 100,
-      opacity: 0,
-      ease: "power1.inOut",
-      scrollTrigger: {
-        trigger: coachProComp,
-        start: "top bottom",
-        end: "top center",
-        scrub: 0.5,
-        markers: true,
       },
     });
-    */
     
   });
 
