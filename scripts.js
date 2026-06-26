@@ -237,6 +237,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
+  // PURPOSE IMAGES
+
+  const purposeImageLeft = document.querySelector('#purposeImageLeft');
+  const purposeImageRight = document.querySelector('#purposeImageRight');
+
+  gsap.fromTo(purposeImageLeft,
+              {
+                yPercent: -25,
+                rotateY: -5,
+                ease: 'power1.inOut',
+                scrollTrigger: {
+                  trigger: 'intro-img-col'
+  });
+  
+  
+  
   // PURPOSE SLIDER
   
   const purposeSliderComponents = document.querySelectorAll('.purpose-slider-component');
@@ -586,9 +602,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     ScrollTrigger.create({
       trigger: coachProComp,
-      start: "top bottom",
-      end: "top center",
-      markers: true,
+      start: "top 75%",
+      end: "top top",
+      markers: false,
       scrub: 0.5,
       animation: tl,
       //toggleActions: "play none none none",
