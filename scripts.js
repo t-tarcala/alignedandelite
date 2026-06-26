@@ -631,8 +631,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     ScrollTrigger.create({
       trigger: coachProComp,
-      start: "top 75%",
-      end: "top top",
+      start: "top 90%",
+      end: "top 30%",
       markers: false,
       scrub: 0.5,
       animation: tl,
