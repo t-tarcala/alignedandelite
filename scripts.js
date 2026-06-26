@@ -246,10 +246,17 @@ document.addEventListener('DOMContentLoaded', function() {
               {
                 yPercent: -25,
                 rotateY: -5,
+              },
+              {
+                yPercent: 25,
+                rotateY: 5,
                 ease: 'power1.inOut',
                 scrollTrigger: {
-                  trigger: 'intro-img-col'
-  });
+                  trigger: '.intro-img-col',
+                  scrub: 0.5,
+                },
+              },
+  );
   
   
   
