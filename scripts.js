@@ -246,15 +246,32 @@ document.addEventListener('DOMContentLoaded', function() {
 
   gsap.set (purposeImageCol, { transformStyle: "preserve-3d", transformPerspective: 1000 });
   gsap.set (purposeImageLeft, { transformStyle: "preserve-3d", transformOrigin: "50% 50%" });
+  gsap.set (purposeImageRight, { transformStyle: "preserve-3d", transformOrigin: "50% 50%" });
 
   gsap.fromTo(purposeImageLeft,
               {
                 yPercent: 0,
-                rotateY: -5,
+                rotateY: -3,
               },
               {
                 yPercent: 20,
-                rotateY: 5,
+                rotateY: 9,
+                ease: 'power1.inOut',
+                scrollTrigger: {
+                  trigger: '.intro-img-col',
+                  scrub: 0.5,
+                },
+              },
+  );
+
+  gsap.fromTo(purposeImageRight,
+              {
+                yPercent: 20,
+                rotateY: 3,
+              },
+              {
+                yPercent: 0,
+                rotateY: -9,
                 ease: 'power1.inOut',
                 scrollTrigger: {
                   trigger: '.intro-img-col',
