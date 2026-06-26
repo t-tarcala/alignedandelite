@@ -250,11 +250,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
   gsap.fromTo(purposeImageLeft,
               {
-                yPercent: 0,
+                yPercent: -10,
                 rotateY: -3,
               },
               {
-                yPercent: 15,
+                yPercent: 10,
                 rotateY: 9,
                 ease: 'power1.inOut',
                 scrollTrigger: {
@@ -266,11 +266,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
   gsap.fromTo(purposeImageRight,
               {
-                yPercent: 15,
+                yPercent: 10,
                 rotateY: 3,
               },
               {
-                yPercent: 0,
+                yPercent: -10,
                 rotateY: -9,
                 ease: 'power1.inOut',
                 scrollTrigger: {
