@@ -242,13 +242,15 @@ document.addEventListener('DOMContentLoaded', function() {
   const purposeImageLeft = document.querySelector('#purposeImageLeft');
   const purposeImageRight = document.querySelector('#purposeImageRight');
 
+  gsap.set (purposeImageLeft, { transformStyle: "preserve-3d", transformOrigin: "50% 50%" });
+
   gsap.fromTo(purposeImageLeft,
               {
-                yPercent: -25,
+                yPercent: -10,
                 rotateY: -5,
               },
               {
-                yPercent: 25,
+                yPercent: 10,
                 rotateY: 5,
                 ease: 'power1.inOut',
                 scrollTrigger: {
