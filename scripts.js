@@ -600,10 +600,13 @@ document.addEventListener('DOMContentLoaded', function() {
       markers: true,
       scrub: 0.5,
       animation: mariasaTween,
+      toggleActions: "play none none none",
+      /*
       onLeave: (self) => {
-        gsap.set(marisa, { xPercent: 0, opacity: 1 }); // snap to final state
+        gsap.set(marisa, { xPercent: 0, opacity: 1, }); // snap to final state
         self.kill();
       },
+      */
     });
 
     /*
