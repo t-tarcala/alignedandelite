@@ -579,11 +579,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
   mm.add("(min-aspect-ratio: 1/0.99999999)", () => {
 
-    /*
-    gsap.set(marisa, { xPercent: 100, opacity: 0 });
-    gsap.set(kathleen, { xPercent: -100, opacity: 0 });
-    */
+    ScrollTrigger.create({
+      trigger: coachProComp,
+      start: "top bottom",
+      end: "top center",
+      markers: true,
+      scrub: 0.5,
+      onEnter: () => gsap.from(marisa, { xPercent: 100, opacity: 0, ease: "power1.inOut", }),
+    });
     
+    /*
     gsap.from(marisa, {
       xPercent: 100,
       opacity: 0,
@@ -591,11 +596,12 @@ document.addEventListener('DOMContentLoaded', function() {
       scrollTrigger: {
         trigger: coachProComp,
         start: "top bottom",
-        end: "top centre",
+        end: "top center",
         scrub: 0.5,
         markers: true,
       },
     });
+    */
     
   });
 
