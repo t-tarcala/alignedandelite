@@ -606,6 +606,7 @@ document.addEventListener('DOMContentLoaded', function() {
       },
     });
 
+    /*
     ScrollTrigger.create({
       trigger: coachProComp,
       start: "top bottom",
