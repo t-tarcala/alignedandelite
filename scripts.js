@@ -647,6 +647,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
+  window.addEventListener("load", () => {
+    lenis.scrollTo(window.scrollY, { immediate: true });
+    ScrollTrigger.refresh();
+  });
+
+
+
   /*
   
   // BG ANIMATION
