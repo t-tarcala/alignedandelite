@@ -583,7 +583,7 @@ document.addEventListener('DOMContentLoaded', function() {
       xPercent: 100,
       opacity: 0,
       ease: "power1.inOut",
-      paused: false, // ScrollTrigger will control playback
+      paused: true, // ScrollTrigger will control playback
     });
 
     const kathleenTween = gsap.from(kathleen, {
@@ -599,20 +599,18 @@ document.addEventListener('DOMContentLoaded', function() {
       end: "top center",
       markers: true,
       scrub: 0.5,
-      animation: mariasaTween,
-      //toggleActions: "play none none none",
+      animation: marisaTween,
       onLeave: (self) => {
         gsap.set(marisa, { xPercent: 0, opacity: 1, }); // snap to final state
         self.kill();
       },
     });
 
-    /*
     ScrollTrigger.create({
       trigger: coachProComp,
       start: "top bottom",
       end: "top center",
-      markers: true,
+      markers: false,
       scrub: 0.5,
       animation: kathleenTween,
       onLeave: (self) => {
