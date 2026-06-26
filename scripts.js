@@ -600,10 +600,12 @@ document.addEventListener('DOMContentLoaded', function() {
       markers: true,
       scrub: 0.5,
       animation: marisaTween,
+      toggleActions: "play none none none",
+      /*
       onLeave: (self) => {
         gsap.set(marisa, { xPercent: 0, opacity: 1, }); // snap to final state
         self.kill();
-      },
+      },*/
     });
 
     ScrollTrigger.create({
@@ -613,10 +615,12 @@ document.addEventListener('DOMContentLoaded', function() {
       markers: false,
       scrub: 0.5,
       animation: kathleenTween,
+      toggleActions: "play none none none",
+      /*
       onLeave: (self) => {
         gsap.set(kathleen, { xPercent: 0, opacity: 1 });
         self.kill();
-      },
+      },*/
     });
     
     /*
